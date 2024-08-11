@@ -1,5 +1,3 @@
-[![Download on Modrinth](https://raw.githubusercontent.com/Prospector/badges/master/modrinth-badge-72h-padded.png)](https://modrinth.com/mod/wakes)
-
 ## Satin Free
 The newer versions of the original [Wakes](https://modrinth.com/mod/wakes) depends on [Satin API](https://modrinth.com/mod/satin-api) which cripples your performance. This fork updates Wakes version 0.2.2 (last version without Satin) to 1.21. Compared to the original you can expect up to a 330% performance improvement depending on the rest of your mods.
 
