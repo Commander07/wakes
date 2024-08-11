@@ -8,9 +8,9 @@
 		"Goby56"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/wakes",
-		"sources": "https://github.com/Goby56/wakes",
-		"issues": "https://github.com/Goby56/wakes/issues"
+		"homepage": "https://modrinth.com/mod/satin-free-wakes",
+		"sources": "https://github.com/Commander07/wakes",
+		"issues": "https://github.com/Commander07/wakes/issues"
 	},
 	"license": "GPLv3",
 	"icon": "assets/wakes/icon.png",
