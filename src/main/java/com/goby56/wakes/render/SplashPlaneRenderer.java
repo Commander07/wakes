@@ -44,7 +44,7 @@ public class SplashPlaneRenderer implements ClientLifecycleEvents.ClientStarted 
         public Vec2f uvOffset = new Vec2f(0f, 0f);
 
         public Texture(String path, int resolution, int frames, int stages) {
-            this.id = new Identifier("wakes", path);
+            this.id = Identifier.of("wakes", path);
             this.res = resolution;
             this.width = frames;
             this.height = stages * 2;
@@ -99,8 +99,7 @@ public class SplashPlaneRenderer implements ClientLifecycleEvents.ClientStarted 
     }
 
     private static void renderSurface(Matrix4f matrix, Vector3f color, int light) {
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
+        BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
 
         // https://streamable.com/tz0gp
         for (int s = -1; s < 2; s++) {
@@ -116,13 +115,12 @@ public class SplashPlaneRenderer implements ClientLifecycleEvents.ClientStarted 
                         .texture((float) (vertex.x / tex.width + tex.uvOffset.x), (float) (vertex.y / tex.height + tex.uvOffset.y))
                         .overlay(OverlayTexture.DEFAULT_UV)
                         .light(light)
-                        .normal((float) normal.x, (float) normal.y, (float) normal.z)
-                        .next();
+                        .normal((float) normal.x, (float) normal.y, (float) normal.z);
             }
         }
 
         RenderSystem.disableCull();
-        Tessellator.getInstance().draw();
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
         RenderSystem.enableCull();
     }
 

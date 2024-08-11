@@ -34,10 +34,9 @@ public class FoamOutlineRenderer {
                 .filter(layer -> layer.getId().toString().contains(typeID[typeID.length - 1]))
                 .map(modelLoader::getModelPart);
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
         RenderSystem.setShader(GameRenderer::getRenderTypeEntitySolidProgram);
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
-        RenderSystem.setShaderTexture(0, new Identifier("wakes", "icon.png"));
+        RenderSystem.setShaderTexture(0, Identifier.of("wakes", "icon.png"));
 
         Matrix4f matrix = matrices.peek().getPositionMatrix();
 
@@ -67,15 +66,14 @@ public class FoamOutlineRenderer {
                                 .texture(i < 2 ? 0 : 1, i == 0 || i == 3 ? 0 : 1)
                                 .overlay(OverlayTexture.DEFAULT_UV)
                                 .light(light)
-                                .normal(0, 1f, 0)
-                                .next();
+                                .normal(0, 1f, 0);
                     }
                     return;
                 }
             });
         });
 
-        Tessellator.getInstance().draw();
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
     }
 
     private static Vector3f getVertexAbsolutePos(ModelPart.Vertex vertex, ModelPart part, Matrix4f cuboidTransform, Vector3f origin) {

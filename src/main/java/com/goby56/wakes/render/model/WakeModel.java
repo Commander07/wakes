@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
 public class WakeModel<T extends Entity> extends EntityModel<T> {
-    public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(new Identifier(WakesClient.MOD_ID, "wake"), "main");
+    public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Identifier.of(WakesClient.MOD_ID, "wake"), "main");
     private final ModelPart wake;
 
     public WakeModel(ModelPart root) {
@@ -52,7 +52,7 @@ public class WakeModel<T extends Entity> extends EntityModel<T> {
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        wake.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
+        wake.render(matrices, vertices, light, overlay, color);
     }
 }
