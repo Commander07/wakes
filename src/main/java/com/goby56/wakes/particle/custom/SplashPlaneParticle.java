@@ -95,7 +95,7 @@ public class SplashPlaneParticle extends Particle {
     }
 
     @Override
-    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
+    public void render(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
         if (this.dead) return;
         MatrixStack modelMatrix = getMatrixStackFromCamera(camera, tickDelta);
         int light = this.getBrightness(tickDelta);

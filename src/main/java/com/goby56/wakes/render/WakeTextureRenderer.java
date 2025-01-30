@@ -32,7 +32,7 @@ public class WakeTextureRenderer implements WorldRenderEvents.AfterTranslucent {
         ArrayList<WakeNode> nodes = wakeHandler.getVisible(context.frustum());
         Matrix4f matrix = context.matrixStack().peek().getPositionMatrix();
         RenderSystem.enableBlend();
-        context.lightmapTextureManager().enable();
+//        context.lightmapTextureManager().enable();
 
         if (MinecraftClient.isFabulousGraphicsOrBetter()) {
             WakesClient.CONFIG_INSTANCE.blendMode = BlendingFunction.SCREEN;

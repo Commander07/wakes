@@ -33,7 +33,7 @@ public class WakeHandler {
         this.world = world;
         WakeNode.calculateAlpha();
         this.minY = world.getBottomY();
-        this.maxY = world.getTopY();
+        this.maxY = world.getTopYInclusive();
         int worldHeight = this.maxY - this.minY;
         this.trees = new ArrayList<>(worldHeight);
         this.toBeInserted = new ArrayList<>(worldHeight);

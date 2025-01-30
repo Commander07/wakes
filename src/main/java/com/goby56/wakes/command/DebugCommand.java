@@ -45,9 +45,9 @@ public class DebugCommand {
 
         int col = BiomeColors.getWaterColor(world, blockPos);
         cmdCtx.getSource().sendFeedback(Text.of(String.format("(%d, %d, %d)",
-                ColorHelper.Argb.getRed(col),
-                ColorHelper.Argb.getGreen(col),
-                ColorHelper.Argb.getBlue(col))));
+                ColorHelper.getRed(col),
+                ColorHelper.getGreen(col),
+                ColorHelper.getBlue(col))));
         return 1;
     }
 

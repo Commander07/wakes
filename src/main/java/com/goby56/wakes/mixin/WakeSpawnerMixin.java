@@ -34,8 +34,6 @@ public abstract class WakeSpawnerMixin implements ProducesWake {
 
 	@Shadow private Vec3d velocity;
 
-	@Shadow public float horizontalSpeed;
-	@Shadow public float prevHorizontalSpeed;
 	@Shadow private Vec3d pos;
 	@Shadow public double prevX;
 	@Shadow public double prevY;

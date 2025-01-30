@@ -24,7 +24,7 @@ public enum WakeColor implements StringIdentifiable {
     public final int argb;
 
     WakeColor(int red, int green, int blue, int alpha) {
-        this.argb = ColorHelper.Argb.getArgb(alpha, blue, green, red); // abgr actually because big-endian?
+        this.argb = ColorHelper.getArgb(alpha, blue, green, red); // abgr actually because big-endian?
     }
 
     public static WakeColor getColor(float avg) {

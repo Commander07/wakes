@@ -5,10 +5,11 @@ import com.goby56.wakes.duck.ProducesWake;
 import com.goby56.wakes.utils.WakesUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.EntityModelLoader;
+import net.minecraft.client.render.entity.model.LoadedEntityModels;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -28,14 +29,13 @@ public class FoamOutlineRenderer {
         float height = WakesUtils.getWaterLevel(entity.getWorld(), entity);
 
         String[] typeID = entity.getType().toString().split("\\.");
-
-        EntityModelLoader modelLoader = MinecraftClient.getInstance().getEntityModelLoader();
+        LoadedEntityModels modelLoader = MinecraftClient.getInstance().getLoadedEntityModels();
         Stream<ModelPart> parts = EntityModelLayers.getLayers()
-                .filter(layer -> layer.getId().toString().contains(typeID[typeID.length - 1]))
+                .filter(layer -> layer.id().toString().contains(typeID[typeID.length - 1]))
                 .map(modelLoader::getModelPart);
 
         BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
-        RenderSystem.setShader(GameRenderer::getRenderTypeEntitySolidProgram);
+        RenderSystem.setShader(MinecraftClient.getInstance().getShaderLoader().getOrCreateProgram(ShaderProgramKeys.RENDERTYPE_ENTITY_SOLID));
         RenderSystem.setShaderTexture(0, Identifier.of("wakes", "icon.png"));
 
         Matrix4f matrix = matrices.peek().getPositionMatrix();
@@ -48,7 +48,7 @@ public class FoamOutlineRenderer {
                 float minY = Float.POSITIVE_INFINITY;
                 float maxY = Float.NEGATIVE_INFINITY;
                 for (ModelPart.Quad quad : cuboid.sides) {
-                    for (ModelPart.Vertex vertex : quad.vertices) {
+                    for (ModelPart.Vertex vertex : quad.vertices()) {
                         Vector3f pos = getVertexAbsolutePos(vertex, modelPart, cuboidMatrix, entityPos);
                         if (pos.y < minY) minY = pos.y;
                         if (pos.y > maxY) maxY = pos.y;
@@ -57,9 +57,9 @@ public class FoamOutlineRenderer {
                 if (minY > height || maxY < height) return;
 
                 for (ModelPart.Quad quad : cuboid.sides) {
-                    if (quad.direction.y == 0) continue;
+                    if (quad.direction().y == 0) continue;
                     for (int i = 0; i < 4; i++) {
-                        Vector3f pos = getVertexAbsolutePos(quad.vertices[i], modelPart, cuboidMatrix, entityPos); // TODO CACHE RESULT
+                        Vector3f pos = getVertexAbsolutePos(quad.vertices()[i], modelPart, cuboidMatrix, entityPos); // TODO CACHE RESULT
                         System.out.printf("writing vertex %d at %s from %s\n", i, pos, path);
                         buffer.vertex(matrix, pos.x + 0.1f * Math.signum(pos.x), height, pos.z + 0.1f * Math.signum(pos.z))
                                 .color(1f, 1f, 1f, 1f)
@@ -78,7 +78,7 @@ public class FoamOutlineRenderer {
 
     private static Vector3f getVertexAbsolutePos(ModelPart.Vertex vertex, ModelPart part, Matrix4f cuboidTransform, Vector3f origin) {
         Vector4f pos = cuboidTransform.transform(
-                new Vector4f((part.pivotX + vertex.pos.x) / 16f, (part.pivotY + vertex.pos.y) / 16f, (part.pivotZ + vertex.pos.z) / 16f, 0));
+                new Vector4f((part.pivotX + vertex.pos().x) / 16f, (part.pivotY + vertex.pos().y) / 16f, (part.pivotZ + vertex.pos().z) / 16f, 0));
         return new Vector3f(pos.x + origin.x, pos.y + origin.y, pos.z + origin.z);
     }
 }
